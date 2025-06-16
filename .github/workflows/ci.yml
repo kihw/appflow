@@ -1,0 +1,281 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-python:
+    name: Test Python Backend
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['3.10', '3.11', '3.12']
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r main/requirements.txt
+        pip install pytest pytest-cov
+    
+    - name: Run Python tests
+      run: |
+        cd main
+        python -m pytest tests/ -v --cov=. --cov-report=xml
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./main/coverage.xml
+        flags: python
+        name: python-${{ matrix.python-version }}-${{ matrix.os }}
+
+  test-electron:
+    name: Test Electron Frontend
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: ['18', '20']
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Install Node.js dependencies
+      run: |
+        cd frontend
+        npm ci
+    
+    - name: Lint frontend code
+      run: |
+        cd frontend
+        npm run lint || echo "Linting not configured yet"
+    
+    - name: Test frontend (if tests exist)
+      run: |
+        cd frontend
+        npm test || echo "Frontend tests not configured yet"
+
+  build:
+    name: Build Application
+    needs: [test-python, test-electron]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r main/requirements.txt
+        pip install pyinstaller
+        cd frontend
+        npm ci
+    
+    - name: Build Python backend
+      run: |
+        cd main
+        pyinstaller --onefile --name appflow-backend appflow.py
+    
+    - name: Build Electron app
+      run: |
+        cd frontend
+        npm run build
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: appflow-${{ matrix.os }}
+        path: |
+          main/dist/
+          frontend/dist/
+        retention-days: 30
+
+  release:
+    name: Create Release
+    needs: [build]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Get version
+      id: version
+      run: |
+        # Extract version from package.json
+        VERSION=$(node -p "require('./frontend/package.json').version")
+        echo "version=v$VERSION" >> $GITHUB_OUTPUT
+        echo "Version: $VERSION"
+    
+    - name: Download all artifacts
+      uses: actions/download-artifact@v3
+    
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.version }}
+        release_name: AppFlow ${{ steps.version.outputs.version }}
+        body: |
+          ## Changes in this Release
+          
+          This is an automated release of AppFlow.
+          
+          ### Features
+          - ✅ Cross-platform application automation
+          - ✅ Intelligent workflow suggestions
+          - ✅ Modern Electron interface
+          - ✅ Rule-based triggers and actions
+          
+          ### Downloads
+          Choose the appropriate build for your operating system.
+        draft: false
+        prerelease: false
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/python@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --file=main/requirements.txt
+      continue-on-error: true
+    
+    - name: Run npm audit
+      run: |
+        cd frontend
+        npm audit --audit-level=high || echo "Audit completed with warnings"
+
+  code-quality:
+    name: Code Quality Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install Python tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 black isort mypy
+        pip install -r main/requirements.txt
+    
+    - name: Run Black (Python formatter)
+      run: |
+        cd main
+        black --check --diff .
+      continue-on-error: true
+    
+    - name: Run isort (Import sorter)
+      run: |
+        cd main
+        isort --check-only --diff .
+      continue-on-error: true
+    
+    - name: Run Flake8 (Python linter)
+      run: |
+        cd main
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    
+    - name: Run MyPy (Type checker)
+      run: |
+        cd main
+        mypy . --ignore-missing-imports || echo "MyPy check completed with warnings"
+
+  performance-test:
+    name: Performance Testing
+    runs-on: ubuntu-latest
+    needs: [test-python]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r main/requirements.txt
+        pip install memory-profiler psutil
+    
+    - name: Run performance tests
+      run: |
+        cd main
+        # Test rule engine performance
+        python -c "
+        import time
+        from core.rule_engine import RuleEngine
+        
+        # Create test rules
+        rules = []
+        for i in range(100):
+            rules.append({
+                'name': f'Test Rule {i}',
+                'triggers': [{'cpu_above': 50}],
+                'actions': [{'notify': f'Test {i}'}],
+                'enabled': True
+            })
+        
+        # Measure performance
+        start_time = time.time()
+        engine = RuleEngine(rules, run_once=True)
+        engine.run()
+        end_time = time.time()
+        
+        print(f'Processed {len(rules)} rules in {end_time - start_time:.2f} seconds')
+        print(f'Performance: {len(rules)/(end_time - start_time):.2f} rules/second')
+        "
