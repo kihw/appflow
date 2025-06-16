@@ -1,0 +1,61 @@
+- name: "🎮 Gaming Session Setup"
+  description: "Configure l'environnement pour une session de jeu"
+  triggers:
+    - app_start: "steam.exe"
+  actions:
+    - notify: "Configuration gaming activée"
+    - kill: "chrome.exe"
+    - kill: "slack.exe"
+    - kill: "teams.exe"
+    - wait: 2
+    - launch: "msiafterburner.exe"
+    - open_url: "https://discord.com/app"
+  cooldown: 600
+  enabled: true
+
+- name: "📊 Performance Monitor"
+  description: "Lance les outils de monitoring des performances"
+  triggers:
+    - cpu_above: 85
+  actions:
+    - notify: "CPU élevé détecté - Lancement du monitoring"
+    - launch: "taskmgr.exe"
+    - wait: 5
+    - notify: "Gestionnaire des tâches ouvert"
+  cooldown: 300
+  enabled: true
+
+- name: "🌐 Heavy Network Usage"
+  description: "Actions lors d'un usage réseau intensif"
+  triggers:
+    - network_above: 10000
+  actions:
+    - notify: "Trafic réseau élevé détecté"
+    - wait: 3
+    - notify: "Monitoring du réseau en cours..."
+  cooldown: 120
+  enabled: true
+
+- name: "🔄 Auto Backup Trigger"
+  description: "Déclenche une sauvegarde automatique"
+  triggers:
+    - at_time: "02:00"
+  actions:
+    - notify: "Début de la sauvegarde automatique"
+    - launch: "robocopy C:\\Users\\%USERNAME%\\Documents C:\\Backup\\Documents /MIR"
+    - wait: 30
+    - notify: "Sauvegarde terminée"
+  cooldown: 86400
+  enabled: false
+
+- name: "🎵 Music Break"
+  description: "Lance la musique pour une pause"
+  triggers:
+    - at_time: "15:00"
+  actions:
+    - launch: "spotify.exe"
+    - wait: 3
+    - open_url: "https://open.spotify.com/playlist/37i9dQZF1DX0XUsuxWHRQd"
+    - notify: "C'est l'heure de la pause musicale ! 🎵"
+  cooldown: 3600
+  enabled: true
