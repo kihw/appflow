@@ -1,0 +1,57 @@
+- name: "🖥️ Workflow Développement"
+  description: "Lance automatiquement les outils de développement"
+  triggers:
+    - app_start: "code.exe"
+  actions:
+    - wait: 3
+    - launch: "cmd.exe"
+    - notify: "Environnement de développement activé"
+  cooldown: 300
+  enabled: true
+
+- name: "🔋 Économie Batterie"
+  description: "Ferme les applications gourmandes quand la batterie est faible"
+  triggers:
+    - battery_below: 15
+  actions:
+    - notify: "Batterie faible - fermeture des applications gourmandes"
+    - kill: "chrome.exe"
+    - kill: "firefox.exe"
+    - kill: "spotify.exe"
+  cooldown: 600
+  enabled: true
+
+- name: "🌃 Mode Nuit"
+  description: "Configuration automatique pour le mode nuit"
+  triggers:
+    - at_time: "22:00"
+  actions:
+    - notify: "Activation du mode nuit"
+    - kill: "discord.exe"
+    - launch: "notepad.exe"
+  cooldown: 3600
+  enabled: true
+
+- name: "⚡ CPU Surchargé"
+  description: "Actions d'urgence quand le CPU est surchargé"
+  triggers:
+    - cpu_above: 90
+  actions:
+    - notify: "CPU surchargé - fermeture d'applications"
+    - kill: "chrome.exe"
+    - wait: 2
+    - notify: "Optimisation terminée"
+  cooldown: 180
+  enabled: true
+
+- name: "🌐 Ouverture Navigation"
+  description: "Ouvre les sites favoris au démarrage"
+  triggers:
+    - app_start: "chrome.exe"
+  actions:
+    - wait: 5
+    - open_url: "https://github.com"
+    - open_url: "https://stackoverflow.com"
+    - notify: "Sites favoris ouverts"
+  cooldown: 900
+  enabled: true
