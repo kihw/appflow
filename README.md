@@ -1,6 +1,6 @@
 # 🔄 AppFlow – Gestionnaire intelligent de lancement et d'arrêt d'applications
 
-**AppFlow** est un gestionnaire d'applications intelligent pour Windows/Linux/MacOS. Il vous permet d'automatiser le lancement et l'arrêt de vos logiciels selon des règles définies, des workflows ou des scénarios personnalisés.
+**AppFlow** est un gestionnaire d'applications intelligent pour Windows. Il vous permet d'automatiser le lancement et l'arrêt de vos logiciels selon des règles définies, des workflows ou des scénarios personnalisés.
 
 ---
 
