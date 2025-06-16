@@ -1,0 +1,100 @@
+- name: "💼 Work Session Start"
+  description: "Démarre une session de travail avec tous les outils nécessaires"
+  triggers:
+    - at_time: "09:00"
+  actions:
+    - notify: "Début de la journée de travail ! 💼"
+    - launch: "outlook.exe"
+    - wait: 3
+    - launch: "teams.exe"
+    - wait: 2
+    - launch: "slack.exe"
+    - wait: 2
+    - launch: "code.exe"
+    - open_url: "https://github.com"
+    - open_url: "https://calendar.google.com"
+  cooldown: 3600
+  enabled: true
+
+- name: "☕ Coffee Break Reminder"
+  description: "Rappel de pause café avec fermeture temporaire des distractions"
+  triggers:
+    - at_time: "10:30"
+  actions:
+    - notify: "C'est l'heure de la pause café ! ☕"
+    - kill: "chrome.exe"
+    - kill: "firefox.exe"
+    - wait: 2
+    - open_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  cooldown: 86400
+  enabled: true
+
+- name: "🥪 Lunch Break"
+  description: "Configuration pour la pause déjeuner"
+  triggers:
+    - at_time: "12:00"
+  actions:
+    - notify: "C'est l'heure du déjeuner ! Bon appétit ! 🥪"
+    - kill: "teams.exe"
+    - kill: "slack.exe"
+    - kill: "outlook.exe"
+    - launch: "spotify.exe"
+  cooldown: 86400
+  enabled: true
+
+- name: "🏠 End of Work Day"
+  description: "Ferme les applications de travail en fin de journée"
+  triggers:
+    - at_time: "18:00"
+  actions:
+    - notify: "Fin de journée ! Fermeture des applications de travail 🏠"
+    - kill: "teams.exe"
+    - kill: "slack.exe"
+    - kill: "outlook.exe"
+    - kill: "code.exe"
+    - wait: 2
+    - notify: "Bonne soirée ! Applications de travail fermées"
+  cooldown: 3600
+  enabled: true
+
+- name: "📞 Meeting Preparation"
+  description: "Prépare l'environnement pour une réunion importante"
+  triggers:
+    - app_start: "zoom.exe"
+  actions:
+    - notify: "Préparation de l'environnement pour la réunion"
+    - kill: "spotify.exe"
+    - kill: "discord.exe"
+    - kill: "steam.exe"
+    - wait: 1
+    - notify: "Environnement de réunion configuré ✅"
+  cooldown: 300
+  enabled: true
+
+- name: "🔋 Low Battery Work Mode"
+  description: "Optimise l'utilisation pour économiser la batterie au travail"
+  triggers:
+    - battery_below: 25
+  actions:
+    - notify: "Batterie faible - Passage en mode économie d'énergie"
+    - kill: "chrome.exe"
+    - kill: "firefox.exe"
+    - kill: "spotify.exe"
+    - kill: "teams.exe"
+    - wait: 2
+    - launch: "notepad.exe"
+    - notify: "Mode économie d'énergie activé - Applications fermées"
+  cooldown: 900
+  enabled: true
+
+- name: "📧 Email Notification Setup"
+  description: "Configure les notifications email pour les heures de travail"
+  triggers:
+    - app_start: "outlook.exe"
+  actions:
+    - wait: 5
+    - notify: "Outlook démarré - Vérification des emails en cours"
+    - wait: 3
+    - open_url: "https://outlook.office.com"
+  cooldown: 1800
+  enabled: true
