@@ -81,6 +81,16 @@
   - Status indicators and real-time updates
   - System tray integration
 
+- [] **Dynamic UI display**
+  - Real-time UI updates based on system state
+  - Adaptive interface elements
+  - Smooth transitions between views
+
+- [] **Custom title bar**
+  - Removed default Windows title bar
+  - Added custom-designed title bar
+  - Improved window controls integration
+
 - [x] 📊 **Analytics and monitoring**
   - Real-time log viewer with auto-refresh
   - Rule execution statistics
