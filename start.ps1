@@ -18,7 +18,7 @@ function Stop-Backend {
 Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action { Stop-Backend }
 
 # Also handle Ctrl+C
-$null = Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action { Stop-Backend }
+$null = Register-ObjectEvent -InputObject $Host -EventName CancelKeyPress -Action { Stop-Backend }
 
 try {
     # Launch the Electron frontend

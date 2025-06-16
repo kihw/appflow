@@ -1,9 +1,9 @@
 # 🔄 AppFlow – Gestionnaire intelligent de lancement et d'arrêt d'applications
 
-**AppFlow** est un gestionnaire d'applications intelligent et moderne pour Windows/Linux/MacOS. Il automatise le lancement et l'arrêt de vos logiciels selon des règles définies, des workflows personnalisés, et des déclencheurs intelligents.
+**AppFlow** est un gestionnaire d'applications intelligent et moderne pour Windows. Il automatise le lancement et l'arrêt de vos logiciels selon des règles définies, des workflows personnalisés, et des déclencheurs intelligents.
 
 ![AppFlow Banner](https://img.shields.io/badge/AppFlow-v0.1.0-blue?style=for-the-badge&logo=electron)
-![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey?style=for-the-badge)
+![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Build Status](https://img.shields.io/github/actions/workflow/status/kihw/appflow/ci.yml?style=for-the-badge)
 
@@ -51,7 +51,8 @@ cd appflow
 python build.py all
 
 # Lancer AppFlow
-./start.sh  # Linux/macOS
+./start.ps1  # Windows (PowerShell)
+# (appuyez sur Ctrl+C pour arrêter proprement)
 ```
 
 ### Installation manuelle
@@ -193,7 +194,7 @@ python build.py dist
 ### Tests automatisés
 - ✅ **Tests unitaires** Python avec couverture complète
 - ✅ **Tests d'intégration** pour les workflows
-- ✅ **Tests multi-plateformes** (Windows, Linux, macOS)
+- ✅ **Tests automatisés pour Windows**
 - ✅ **Analyse de sécurité** automatisée
 
 ---
@@ -235,7 +236,7 @@ Nous accueillons chaleureusement les contributions ! Consultez notre [**Guide de
 
 - 📝 **15,000+** lignes de code
 - 🧪 **150+** tests automatisés  
-- 🌍 **3** plateformes supportées
+- 🌍 **1** plateformes supportées
 - ⭐ **90%+** couverture de tests
 - 🚀 **<2s** temps de démarrage
 - 💾 **<50MB** empreinte mémoire
