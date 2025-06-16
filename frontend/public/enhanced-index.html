@@ -1,0 +1,523 @@
+              <i class="fas fa-stop"></i>
+              Arrêter le moteur
+            </button>
+            <button id="refresh-rules" class="btn info">
+              <i class="fas fa-sync-alt"></i>
+              Actualiser règles
+            </button>
+            <button id="create-rule-btn" class="btn warning">
+              <i class="fas fa-plus"></i>
+              Nouvelle règle
+            </button>
+            <button id="open-rules-folder" class="btn">
+              <i class="fas fa-folder-open"></i>
+              Dossier règles
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="enhanced-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-clock"></i>
+              Activité récente
+            </h2>
+            <div class="card-actions">
+              <button id="refresh-activity" class="btn">
+                <i class="fas fa-refresh"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div id="recent-activity" class="log-container" style="max-height: 200px;">
+            <div style="color: var(--text-gray); font-style: italic; text-align: center; padding: 20px;">
+              Aucune activité récente
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rules Tab -->
+      <div id="rules-tab" class="content-panel">
+        <div class="enhanced-card">
+          <div class="rules-header">
+            <div class="rules-search">
+              <input type="text" class="search-input" placeholder="Rechercher des règles..." id="rules-search">
+              <i class="fas fa-search search-icon"></i>
+            </div>
+            
+            <div class="btn-group">
+              <button id="select-all-rules" class="btn">
+                <i class="fas fa-check-square"></i>
+                Tout sélectionner
+              </button>
+              <button id="bulk-enable" class="btn success">
+                <i class="fas fa-toggle-on"></i>
+                Activer sélection
+              </button>
+              <button id="bulk-disable" class="btn warning">
+                <i class="fas fa-toggle-off"></i>
+                Désactiver sélection
+              </button>
+              <button id="bulk-delete" class="btn danger">
+                <i class="fas fa-trash"></i>
+                Supprimer sélection
+              </button>
+            </div>
+          </div>
+          
+          <div id="rules-list" class="rules-list">
+            <div style="padding: 40px; text-align: center; color: var(--text-gray);">
+              <i class="fas fa-cog fa-3x" style="opacity: 0.3; margin-bottom: 20px;"></i>
+              <div>Aucune règle trouvée. Créez votre première règle !</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Suggestions Tab -->
+      <div id="suggestions-tab" class="content-panel">
+        <div class="enhanced-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-brain"></i>
+              Intelligence Artificielle
+            </h2>
+            <div class="card-actions">
+              <button id="generate-suggestions" class="btn warning">
+                <i class="fas fa-magic"></i>
+                Générer suggestions
+              </button>
+            </div>
+          </div>
+          
+          <div id="suggestions-container">
+            <div style="text-align: center; padding: 40px; color: var(--text-gray);">
+              <i class="fas fa-lightbulb fa-3x" style="opacity: 0.3; margin-bottom: 20px;"></i>
+              <div>Cliquez sur "Générer suggestions" pour analyser vos habitudes d'utilisation et obtenir des recommandations intelligentes.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Learning Progress -->
+        <div class="enhanced-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-graduation-cap"></i>
+              Apprentissage IA
+            </h2>
+          </div>
+          
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-value" id="patterns-learned">0</div>
+              <div class="metric-label">Motifs appris</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value" id="accuracy-score">-</div>
+              <div class="metric-label">Précision des suggestions</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value" id="data-points">0</div>
+              <div class="metric-label">Points de données</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics Tab -->
+      <div id="analytics-tab" class="content-panel">
+        <div class="enhanced-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-chart-line"></i>
+              Analytiques de performance
+            </h2>
+            <div class="card-actions">
+              <select id="analytics-period" class="btn">
+                <option value="today">Aujourd'hui</option>
+                <option value="week">Cette semaine</option>
+                <option value="month">Ce mois</option>
+                <option value="all">Tout</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-value" id="total-executions">0</div>
+              <div class="metric-label">Exécutions totales</div>
+              <div class="metric-change positive">+12% vs hier</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value" id="avg-response-time">0ms</div>
+              <div class="metric-label">Temps de réponse moyen</div>
+              <div class="metric-change negative">+5ms vs hier</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value" id="success-rate">100%</div>
+              <div class="metric-label">Taux de succès</div>
+              <div class="metric-change positive">+2% vs hier</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value" id="most-used-rule">-</div>
+              <div class="metric-label">Règle la plus utilisée</div>
+            </div>
+          </div>
+          
+          <div class="chart-container">
+            <canvas id="executions-chart" width="400" height="200"></canvas>
+          </div>
+        </div>
+
+        <!-- System Performance -->
+        <div class="enhanced-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-microchip"></i>
+              Performance système
+            </h2>
+          </div>
+          
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-value" id="cpu-usage">0%</div>
+              <div class="metric-label">Utilisation CPU</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value" id="memory-usage">0MB</div>
+              <div class="metric-label">Mémoire utilisée</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value" id="battery-level">-</div>
+              <div class="metric-label">Niveau batterie</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value" id="network-activity">0KB/s</div>
+              <div class="metric-label">Activité réseau</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logs Tab -->
+      <div id="logs-tab" class="content-panel">
+        <div class="enhanced-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-file-alt"></i>
+              Logs système en temps réel
+            </h2>
+            <div class="card-actions">
+              <button id="refresh-log" class="btn">
+                <i class="fas fa-sync-alt"></i>
+                Actualiser
+              </button>
+              <button id="clear-log" class="btn warning">
+                <i class="fas fa-trash"></i>
+                Vider logs
+              </button>
+              <button id="export-log" class="btn info">
+                <i class="fas fa-download"></i>
+                Exporter
+              </button>
+              <div class="rule-toggle" id="auto-refresh-toggle">
+                <span style="margin-right: 10px; font-size: 0.9rem;">Auto-refresh</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <input type="text" id="log-filter" class="search-input" placeholder="Filtrer les logs (par exemple: 'error', 'rule', 'notify')...">
+          </div>
+          
+          <div id="log-container" class="log-container">
+            <div style="color: var(--text-gray); font-style: italic; text-align: center; padding: 20px;">
+              Aucun log disponible
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div id="settings-tab" class="content-panel">
+        <div class="enhanced-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-cog"></i>
+              Paramètres généraux
+            </h2>
+          </div>
+          
+          <div class="input-group">
+            <label for="polling-interval">Intervalle de vérification (secondes)</label>
+            <input type="number" id="polling-interval" min="0.5" max="60" step="0.5" value="2.0">
+          </div>
+          
+          <div class="input-group">
+            <label for="log-level">Niveau de log</label>
+            <select id="log-level">
+              <option value="debug">Debug</option>
+              <option value="info" selected>Info</option>
+              <option value="warning">Warning</option>
+              <option value="error">Error</option>
+            </select>
+          </div>
+          
+          <div class="input-group">
+            <label>
+              <input type="checkbox" id="startup-engine"> 
+              Démarrer le moteur automatiquement
+            </label>
+          </div>
+          
+          <div class="input-group">
+            <label>
+              <input type="checkbox" id="minimize-to-tray" checked> 
+              Minimiser dans la barre système
+            </label>
+          </div>
+          
+          <div class="input-group">
+            <label>
+              <input type="checkbox" id="notifications-enabled" checked> 
+              Activer les notifications système
+            </label>
+          </div>
+          
+          <div class="btn-group">
+            <button id="save-settings" class="btn success">
+              <i class="fas fa-save"></i>
+              Sauvegarder
+            </button>
+            <button id="reset-settings" class="btn danger">
+              <i class="fas fa-undo"></i>
+              Réinitialiser
+            </button>
+            <button id="export-settings" class="btn info">
+              <i class="fas fa-file-export"></i>
+              Exporter config
+            </button>
+            <button id="import-settings" class="btn warning">
+              <i class="fas fa-file-import"></i>
+              Importer config
+            </button>
+          </div>
+        </div>
+
+        <!-- Advanced Settings -->
+        <div class="enhanced-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-sliders-h"></i>
+              Paramètres avancés
+            </h2>
+          </div>
+          
+          <div class="input-group">
+            <label for="max-concurrent-rules">Nombre maximum de règles simultanées</label>
+            <input type="number" id="max-concurrent-rules" min="1" max="50" value="10">
+          </div>
+          
+          <div class="input-group">
+            <label for="rule-timeout">Timeout des règles (secondes)</label>
+            <input type="number" id="rule-timeout" min="1" max="300" value="30">
+          </div>
+          
+          <div class="input-group">
+            <label for="backup-frequency">Fréquence de sauvegarde (heures)</label>
+            <input type="number" id="backup-frequency" min="1" max="168" value="24">
+          </div>
+          
+          <div class="input-group">
+            <label>
+              <input type="checkbox" id="debug-mode"> 
+              Mode debug (verbose logging)
+            </label>
+          </div>
+          
+          <div class="input-group">
+            <label>
+              <input type="checkbox" id="performance-monitoring"> 
+              Monitoring de performance
+            </label>
+          </div>
+        </div>
+
+        <!-- About -->
+        <div class="enhanced-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-info-circle"></i>
+              À propos d'AppFlow
+            </h2>
+          </div>
+          
+          <div style="text-align: center; padding: 20px;">
+            <div class="logo" style="font-size: 3rem; margin-bottom: 20px;">🔄</div>
+            <h3 style="color: var(--primary-color); margin-bottom: 10px;">AppFlow Enhanced</h3>
+            <p style="color: var(--text-gray); margin-bottom: 20px;">Version 0.2.0 - Gestionnaire intelligent d'applications</p>
+            
+            <div class="metrics-grid">
+              <div class="metric-card">
+                <div class="metric-value">15,000+</div>
+                <div class="metric-label">Lignes de code</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value">150+</div>
+                <div class="metric-label">Tests automatisés</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-value">3</div>
+                <div class="metric-label">Plateformes supportées</div>
+              </div>
+            </div>
+            
+            <div class="btn-group" style="margin-top: 20px;">
+              <button class="btn info" onclick="window.open('https://github.com/kihw/appflow')">
+                <i class="fab fa-github"></i>
+                GitHub
+              </button>
+              <button class="btn" onclick="window.open('https://github.com/kihw/appflow/wiki')">
+                <i class="fas fa-book"></i>
+                Documentation
+              </button>
+              <button class="btn warning" onclick="window.open('https://github.com/kihw/appflow/issues')">
+                <i class="fas fa-bug"></i>
+                Signaler un bug
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <div>© 2025 AppFlow - Fait avec ❤️ par l'équipe AppFlow</div>
+      <div>
+        <span id="connection-status">🟢 Connecté</span> | 
+        <span id="last-update">Dernière mise à jour: jamais</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal pour créer/éditer une règle -->
+  <div id="rule-modal" class="modal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeRuleModal()">
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Créer nouvelle règle</h3>
+        <p style="color: var(--text-gray);">Utilisez le glisser-déposer pour construire votre règle</p>
+      </div>
+      
+      <div class="input-group">
+        <label for="rule-name">
+          <i class="fas fa-tag"></i>
+          Nom de la règle
+        </label>
+        <input type="text" id="rule-name" placeholder="Ex: Workflow développement" />
+      </div>
+
+      <div class="input-group">
+        <label for="rule-description">
+          <i class="fas fa-align-left"></i>
+          Description (optionnelle)
+        </label>
+        <textarea id="rule-description" rows="2" placeholder="Description de ce que fait cette règle"></textarea>
+      </div>
+
+      <div class="drag-palette">
+        <h3 class="palette-title">
+          <i class="fas fa-bullseye"></i>
+          Déclencheurs
+        </h3>
+        <div class="draggable" draggable="true" data-type="app_start">
+          <i class="fas fa-rocket"></i> App Start
+        </div>
+        <div class="draggable" draggable="true" data-type="app_exit">
+          <i class="fas fa-times-circle"></i> App Exit
+        </div>
+        <div class="draggable" draggable="true" data-type="at_time">
+          <i class="fas fa-clock"></i> Heure
+        </div>
+        <div class="draggable" draggable="true" data-type="battery_below">
+          <i class="fas fa-battery-quarter"></i> Batterie faible
+        </div>
+        <div class="draggable" draggable="true" data-type="cpu_above">
+          <i class="fas fa-microchip"></i> CPU élevé
+        </div>
+        <div class="draggable" draggable="true" data-type="network_above">
+          <i class="fas fa-wifi"></i> Réseau élevé
+        </div>
+      </div>
+
+      <div class="drag-palette">
+        <h3 class="palette-title">
+          <i class="fas fa-bolt"></i>
+          Actions
+        </h3>
+        <div class="draggable" draggable="true" data-type="launch">
+          <i class="fas fa-play"></i> Lancer
+        </div>
+        <div class="draggable" draggable="true" data-type="kill">
+          <i class="fas fa-skull"></i> Fermer
+        </div>
+        <div class="draggable" draggable="true" data-type="wait">
+          <i class="fas fa-hourglass-half"></i> Attendre
+        </div>
+        <div class="draggable" draggable="true" data-type="notify">
+          <i class="fas fa-bell"></i> Notifier
+        </div>
+        <div class="draggable" draggable="true" data-type="open_url">
+          <i class="fas fa-external-link-alt"></i> Ouvrir URL
+        </div>
+      </div>
+
+      <div id="rule-builder" class="drop-zone">
+        <div class="drop-zone-icon">
+          <i class="fas fa-hand-paper"></i>
+        </div>
+        <div>Glissez les éléments ici pour construire votre règle</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 10px;">
+          Les déclencheurs définissent quand la règle s'active, les actions définissent ce qui se passe
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="rule-cooldown">
+          <i class="fas fa-stopwatch"></i>
+          Cooldown (secondes, optionnel)
+        </label>
+        <input type="number" id="rule-cooldown" min="0" placeholder="300" />
+      </div>
+
+      <div class="input-group">
+        <label>
+          <input type="checkbox" id="rule-enabled" checked>
+          <i class="fas fa-toggle-on"></i>
+          Règle activée
+        </label>
+      </div>
+
+      <div style="text-align: right; margin-top: 30px;" class="btn-group">
+        <button onclick="closeRuleModal()" class="btn">
+          <i class="fas fa-times"></i>
+          Annuler
+        </button>
+        <button id="save-rule" class="btn success">
+          <i class="fas fa-save"></i>
+          Enregistrer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Include enhanced renderer script -->
+  <script src="enhanced-renderer.js"></script>
+</body>
+</html>
