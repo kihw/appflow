@@ -413,6 +413,87 @@ function closeRuleModal() {
   editingRuleName = null;
 }
 
+// Custom prompt function to replace native prompt
+function customPrompt(message, defaultValue = '') {
+  return new Promise((resolve) => {
+    // Create modal dialog
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    `;
+    
+    const dialog = document.createElement('div');
+    dialog.style.cssText = `
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 15px;
+      min-width: 300px;
+      border: 1px solid var(--border-color);
+    `;
+    
+    dialog.innerHTML = `
+      <h3 style="color: var(--primary-color); margin-bottom: 15px;">${message}</h3>
+      <input type="text" id="prompt-input" value="${defaultValue}" 
+             style="width: 100%; padding: 10px; margin-bottom: 15px; 
+                    background: rgba(255,255,255,0.1); color: var(--text-light);
+                    border: 1px solid var(--border-color); border-radius: 5px;">
+      <div style="text-align: right;">
+        <button id="prompt-cancel" style="margin-right: 10px; padding: 8px 15px; 
+                background: var(--text-gray); color: white; border: none; border-radius: 5px;">
+          Annuler
+        </button>
+        <button id="prompt-ok" style="padding: 8px 15px; 
+                background: var(--primary-color); color: white; border: none; border-radius: 5px;">
+          OK
+        </button>
+      </div>
+    `;
+    
+    modal.appendChild(dialog);
+    document.body.appendChild(modal);
+    
+    const input = dialog.querySelector('#prompt-input');
+    const okBtn = dialog.querySelector('#prompt-ok');
+    const cancelBtn = dialog.querySelector('#prompt-cancel');
+    
+    input.focus();
+    input.select();
+    
+    const cleanup = () => {
+      document.body.removeChild(modal);
+    };
+    
+    okBtn.addEventListener('click', () => {
+      resolve(input.value);
+      cleanup();
+    });
+    
+    cancelBtn.addEventListener('click', () => {
+      resolve(null);
+      cleanup();
+    });
+    
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        resolve(input.value);
+        cleanup();
+      } else if (e.key === 'Escape') {
+        resolve(null);
+        cleanup();
+      }
+    });
+  });
+}
+
 // Drag and drop functionality
 function initializeDragAndDrop() {
   const builder = document.getElementById('rule-builder');
@@ -428,14 +509,15 @@ function initializeDragAndDrop() {
     builder.classList.remove('drag-over');
   });
 
-  builder.addEventListener('drop', (e) => {
+  builder.addEventListener('drop', async (e) => {
     e.preventDefault();
     builder.classList.remove('drag-over');
     
     const type = e.dataTransfer.getData('text/plain');
     if (!type) return;
     
-    const value = prompt(`Valeur pour ${type}:`);
+    // Use custom prompt instead of native prompt
+    const value = await customPrompt(`Valeur pour ${type}:`);
     if (value === null) return;
     
     const obj = {};
@@ -593,3 +675,6 @@ document.addEventListener('keydown', (e) => {
     closeRuleModal();
   }
 });
+
+// Export functions to global scope for HTML onclick handlers
+window.closeRuleModal = closeRuleModal;
